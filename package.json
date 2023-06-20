@@ -10,18 +10,25 @@
     "package": "plasmo package"
   },
   "dependencies": {
-    "plasmo": "0.75.3",
+    "@airgap/beacon-sdk": "^4.0.4",
+    "@plasmohq/storage": "^1.6.1",
+    "bs58check": "2.0.1",
+    "libsodium-wrappers": "^0.7.11",
+    "p-memoize": "4.0.3",
+    "plasmo": "0.76.0",
     "react": "18.2.0",
-    "react-dom": "18.2.0"
+    "react-dom": "18.2.0",
+    "sotez": "^13.0.1",
+    "webextension-polyfill": "^0.10.0"
   },
   "devDependencies": {
+    "@plasmohq/prettier-plugin-sort-imports": "3.6.4",
     "@types/chrome": "0.0.237",
     "@types/node": "20.2.4",
     "@types/react": "18.2.7",
     "@types/react-dom": "18.2.4",
     "prettier": "2.8.8",
-    "typescript": "5.0.4",
-    "@plasmohq/prettier-plugin-sort-imports": "3.6.4"
+    "typescript": "5.0.4"
   },
   "manifest": {
     "host_permissions": [
