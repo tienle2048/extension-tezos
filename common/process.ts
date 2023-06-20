@@ -26,14 +26,15 @@ const decryptMess = async (msg: any) => {
         }
         else return msg
     }
-    catch(err){
-        return 
+    catch (err) {
+        return
     }
 }
 
 
 export const processRequest = async (req: any, port?: Runtime.Port): Promise<any> => {
     const message = await decryptMess(req)
+    console.log("🚀 ~ file: process.ts:37 ~ processRequest ~ message:", message)
     if (message.payload) return await processHandShake(message)
     if (message?.encryptedPayload.type === "permission_request") return await processConnect(message)
     //if (message?.encryptedPayload.type === "acknowledge") return await processAcknowledge(message, req)
@@ -134,21 +135,25 @@ const processTransaction = async (message: any) => {
     )
     let hash = ""
 
-    const transactionParam = operationDetails[0]
-    const { kind, destination, parameters } = transactionParam
-
-    if (kind === "transaction") {
-        const contract = await provider.loadContract(destination)
-        const params = Object.values(parameters.value)
-        const res = await contract.methods[parameters.entrypoint](...params).send({
+    const transactionParam = operationDetails.map((item: any) => {
+        return {
+            ...item,
             fee: 1500,
-            gasLimit: 10600,
-            storageLimit: 300
-        })
-        hash = res.hash
-    }
+            gas_limit: 10600,
+            storage_limit: 300
+        }
+    })
+    console.log("🚀 ~ file: process.ts:146 ~ transactionParam ~ transactionParam:", transactionParam)
 
-    console.log('dadwwwdwdwdwdwd',hash)
+
+    try {
+        const res = await provider.sendOperation({ operation: transactionParam });
+        hash = res.hash
+        console.log('dadwwwdwdwdwdwd', hash)
+    }
+    catch(err){
+        console.warn(err)
+    }
 
     const messagePayload = {
         version: message.encryptedPayload.version,

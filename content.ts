@@ -39,8 +39,8 @@ type BeaconPageMessage = BeaconMessage | { message: BeaconMessage; sender: { id:
 
 const SENDER = {
     id: browser.runtime.id,
-    name: 'Okla - wallet',
-    iconUrl: 'https://coin98.s3.amazonaws.com/t8Iivgv9Uuh7i7rG'
+    name: 'C98 - wallet',
+    iconUrl: 'https://s2.coinmarketcap.com/static/img/coins/64x64/10903.png'
 };
 
 function templeRequest(evt: MessageEvent, isLegacyRequest: boolean) {
