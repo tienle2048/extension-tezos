@@ -6,6 +6,7 @@ import * as Beacon from './beacon';
 
 import { Storage } from "@plasmohq/storage"
 import { Sotez, extractKeys, b58cencode, b58cdecode, prefix } from 'sotez'
+import { TZKT_API_BASE_URLS } from '~constants';
 const storage = new Storage()
 
 const decryptMess = async (msg: any) => {
@@ -83,7 +84,7 @@ const processConnect = async (req: any) => {
         id: req.encryptedPayload.id,
         senderId: await Beacon.getSenderId(),
         type: MessageType.PermissionResponse,
-        publicKey: 'edpkusdW8L2xMnTjLaNQ7UPucRvKfajpSWvPNnXJNo7KveVi9KDij1',
+        publicKey: 'edpkvZj9reBeoDc3kazxA5cs6AEYjAWoiFagzsW75srPWW89jKxLn3',
         network: req.encryptedPayload.network,
         scopes: req.encryptedPayload.scopes
     }
@@ -128,18 +129,20 @@ const processAcknowledge = async (req: any) => {
 const processTransaction = async (message: any) => {
     const { network, operationDetails, sourceAddress } = message.encryptedPayload
 
+    const rpcUrl =TZKT_API_BASE_URLS[network.type]
+    console.warn("🚀 ~ file: process.ts:133 ~ processTransaction ~ rpcUrl:", rpcUrl)
 
-    const provider = new Sotez(network.rpcUrl)
+    const provider = new Sotez(rpcUrl)
     provider.importKey(
-        "edskRz1QEFCVpQWUYKaGMuZbRMwErxjuKdon2aF5fcGHfpfLjcqcN87UDPjVtnxKWrDv8yhRbbDe8dcHrzT6rqJHh3VprNpJDN"
+        "edskRtQfigHbg2Gv3fWQwPZUNduyzmH4vhXa885atwqg79gbsUWgmNvkQ1Do9BPKoELybt7eaf7UjdYFo7PR18M2kmsXtFyMRu"
     )
     let hash = ""
 
     const transactionParam = operationDetails.map((item: any) => {
         return {
             ...item,
-            fee: 1500,
-            gas_limit: 10600,
+            fee: 7538,
+            gas_limit: 70972,
             storage_limit: 300
         }
     })
@@ -147,9 +150,11 @@ const processTransaction = async (message: any) => {
 
 
     try {
+        //const fullOp = await provider.prepareOperation({ operation: transactionParam });
+        //console.log("🚀 ~ file: process.ts:154 ~ processTransaction ~ fullOp:", fullOp)
         const res = await provider.sendOperation({ operation: transactionParam });
         hash = res.hash
-        console.log('dadwwwdwdwdwdwd', hash)
+        console.log('dadwwwdwdwdwdwd', hash) 
     }
     catch(err){
         console.warn(err)
